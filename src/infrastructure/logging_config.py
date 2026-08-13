@@ -45,7 +45,7 @@ def setup_logging(
     root_logger.handlers.clear()
 
     log_format = logging.Formatter(
-        fmt="%(asctime)s | %(levelname)-8s | %(name)s | %(message)s",
+        fmt="%(asctime)s | %(levelname)-8s | %(name)-35s | %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
 
@@ -62,5 +62,5 @@ def setup_logging(
 
     # Log startup message
     logger = logging.getLogger(__name__)
-    logger.info(f"Logging initialized. File: {log_path.absolute()}")
+    logger.info(f"Logging initialized, logfile: {log_path.absolute()}")
     logger.debug("Debug logging enabled")
