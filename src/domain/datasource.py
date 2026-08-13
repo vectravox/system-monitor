@@ -5,11 +5,18 @@ from abc import ABC, abstractmethod
 from .models import DataSample
 
 
+class DataSourceError(Exception):
+    """Base exception for all data source errors.
+
+    Raised when a data source fails to collect data.
+    """
+
+
 class DataSource(ABC):
     """Abstract contract for all data sources.
 
-    Every concrete source (PingSource, TemperatureSource, etc.)
-    must implement the fetch() method.
+    Each concrete implementation provides logic for collecting
+    a specific system metric (CPU, memory, ping, etc.).
     """
 
     @abstractmethod
@@ -23,6 +30,7 @@ class DataSource(ABC):
             DataSourceError: If the source is unavailable or data cannot be read.
             PermissionError: If the process lacks necessary permissions.
             FileNotFoundError: If a required file or device is missing.
+            OSError: If a system call fails.
 
         """
         ...
