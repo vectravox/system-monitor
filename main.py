@@ -5,12 +5,21 @@ and launches the main window. Run this file directly to start
 the system monitoring GUI.
 """
 
+import sys
+
+from PySide6.QtWidgets import QApplication
+
 from src.infrastructure.logging_config import setup_logging
+from src.presentation.main_window import MainWindow
 
 
 def main() -> None:
     """Launch the System Monitor application."""
     setup_logging()
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    sys.exit(app.exec())
 
 
 if __name__ == "__main__":
