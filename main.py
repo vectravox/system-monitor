@@ -9,6 +9,7 @@ import sys
 
 from PySide6.QtWidgets import QApplication
 
+from src.application.monitor_service import MonitorService
 from src.infrastructure.logging_config import setup_logging
 from src.presentation.main_window import MainWindow
 
@@ -16,9 +17,14 @@ from src.presentation.main_window import MainWindow
 def main() -> None:
     """Launch the System Monitor application."""
     setup_logging()
+
     app = QApplication(sys.argv)
-    window = MainWindow()
+
+    service = MonitorService()
+
+    window = MainWindow(service)
     window.show()
+
     sys.exit(app.exec())
 
 
