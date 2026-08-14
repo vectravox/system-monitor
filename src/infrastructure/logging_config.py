@@ -4,6 +4,8 @@ import logging
 import sys
 from pathlib import Path
 
+from . import config
+
 _LOG_LEVELS = {
     "DEBUG": logging.DEBUG,
     "INFO": logging.INFO,
@@ -14,7 +16,7 @@ _LOG_LEVELS = {
 
 
 def setup_logging(
-    log_file: str = "monitor.log",
+    log_file: Path = config.DEFAULT_LOG_PATH,
     console_level: str = "INFO",
     file_level: str = "DEBUG",
 ) -> None:

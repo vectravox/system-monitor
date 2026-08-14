@@ -13,6 +13,7 @@ from PySide6.QtWidgets import (
 )
 
 from src.application.interfaces import Monitor
+from src.infrastructure import config
 
 logger = logging.getLogger(__name__)
 
@@ -29,23 +30,28 @@ class MainWindow(QMainWindow):
         """
         super().__init__()
         self.service = service
+        self.rows = len(self.service.sources)
         self.setup_ui()
         logger.debug("MainWindow initialized")
 
     def setup_ui(self) -> None:
         """Create and arrange all UI components."""
-        self.setWindowTitle("System Monitor")
-        self.setMinimumSize(800, 500)
+        self.setWindowTitle(config.WINDOW_TITLE)
+        self.setMinimumSize(config.WINDOW_MIN_WIDTH, config.WINDOW_MIN_HEIGHT)
 
         # Button
         self.start_stop_button = QPushButton("Старт")
         self.start_stop_button.clicked.connect(self.on_start_stop_clicked)
 
         # Table model
-        self.table_model = QStandardItemModel(10, 2)
+        self.table_model = QStandardItemModel()
         self.table_model.setHorizontalHeaderLabels(["Источник", "Данные"])
-        for row in range(10):
-            self.table_model.setItem(row, 0, QStandardItem(f"Источник {row + 1}"))
+
+        # Inital items
+        for row in range(self.rows):
+            self.table_model.setItem(
+                row, 0, QStandardItem(self.service.sources[row].name)
+            )
             self.table_model.setItem(row, 1, QStandardItem("Ожидание запуска..."))
 
         # Table view
@@ -70,9 +76,28 @@ class MainWindow(QMainWindow):
     @Slot()
     def on_start_stop_clicked(self) -> None:
         """Handle Start/Stop button click."""
-        if not self.service.is_running():
+        if not self.service.is_running:
             self.service.start()
             self.start_stop_button.setText("Стоп")
+            self.update_table()
         else:
             self.service.stop()
             self.start_stop_button.setText("Старт")
+
+    def update_table(self) -> None:
+        """Update table with data from sources."""
+        data = self.service.fetch()
+
+        for row, sample in enumerate(data):
+            self.table_model.setItem(row, 0, QStandardItem(sample.source_name))
+
+            display = sample.value
+
+            if sample.status == "OK":
+                self.table_model.item(row, 1).setForeground(Qt.GlobalColor.black)
+                if sample.unit:
+                    display += f" {sample.unit}"
+            elif sample.status == "ERROR":
+                self.table_model.item(row, 1).setForeground(Qt.GlobalColor.red)
+
+            self.table_model.setItem(row, 1, QStandardItem(display))
