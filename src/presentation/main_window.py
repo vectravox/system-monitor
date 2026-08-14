@@ -2,9 +2,12 @@
 
 import logging
 
+from PySide6.QtCore import Qt, Slot
+from PySide6.QtGui import QStandardItem, QStandardItemModel
 from PySide6.QtWidgets import (
     QMainWindow,
     QPushButton,
+    QTableView,
     QVBoxLayout,
     QWidget,
 )
@@ -25,29 +28,51 @@ class MainWindow(QMainWindow):
 
         """
         super().__init__()
-        self._service = service
-        self._setup_ui()
+        self.service = service
+        self.setup_ui()
         logger.debug("MainWindow initialized")
 
-    def _setup_ui(self) -> None:
+    def setup_ui(self) -> None:
         """Create and arrange all UI components."""
         self.setWindowTitle("System Monitor")
         self.setMinimumSize(800, 500)
 
-        central_widget = QWidget()
-        self.setCentralWidget(central_widget)
-        layout = QVBoxLayout(central_widget)
+        # Button
+        self.start_stop_button = QPushButton("Старт")
+        self.start_stop_button.clicked.connect(self.on_start_stop_clicked)
 
-        self._start_stop_button = QPushButton("Старт")
-        self._start_stop_button.clicked.connect(self._on_start_stop_clicked)
-        layout.addWidget(self._start_stop_button)
-        # layout.addStretch()
+        # Table model
+        self.table_model = QStandardItemModel(10, 2)
+        self.table_model.setHorizontalHeaderLabels(["Источник", "Данные"])
+        for row in range(10):
+            self.table_model.setItem(row, 0, QStandardItem(f"Источник {row + 1}"))
+            self.table_model.setItem(row, 1, QStandardItem("Ожидание запуска..."))
 
-    def _on_start_stop_clicked(self) -> None:
+        # Table view
+        self.table = QTableView()
+        self.table.setSelectionMode(QTableView.SelectionMode.NoSelection)
+        self.table.setEditTriggers(QTableView.EditTrigger.NoEditTriggers)
+        self.table.verticalHeader().setVisible(False)
+        self.table.horizontalHeader().setStretchLastSection(True)
+        self.table.setModel(self.table_model)
+
+        # Create central widget
+        self.central_widget = QWidget()
+        self.setCentralWidget(self.central_widget)
+
+        # Add elements
+        self.central_widget_layout = QVBoxLayout(self.central_widget)
+        self.central_widget_layout.addWidget(
+            self.start_stop_button, alignment=Qt.AlignmentFlag.AlignLeft
+        )
+        self.central_widget_layout.addWidget(self.table)
+
+    @Slot()
+    def on_start_stop_clicked(self) -> None:
         """Handle Start/Stop button click."""
-        if not self._service.is_running():
-            self._service.start()
-            self._start_stop_button.setText("Стоп")
+        if not self.service.is_running():
+            self.service.start()
+            self.start_stop_button.setText("Стоп")
         else:
-            self._service.stop()
-            self._start_stop_button.setText("Старт")
+            self.service.stop()
+            self.start_stop_button.setText("Старт")
