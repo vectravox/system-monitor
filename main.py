@@ -21,10 +21,10 @@ def main() -> None:
 
     app = QApplication(sys.argv)
 
-    sources = generate_sources_list()
-    service = MonitorService(sources)
+    monitor_sources = generate_sources_list()
+    monitor_service = MonitorService(monitor_sources)
 
-    window = MainWindow(service)
+    window = MainWindow(monitor_service)
     window.show()
 
     sys.exit(app.exec())
