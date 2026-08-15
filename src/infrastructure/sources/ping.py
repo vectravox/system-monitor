@@ -3,7 +3,7 @@
 import logging
 import subprocess
 
-from src.domain.data_source import DataSource
+from src.domain.data_source import DataSource, DataSourceError
 from src.domain.models import DataSample
 from src.infrastructure import config
 
@@ -39,7 +39,7 @@ class PingSource(DataSource):
                 return line.split("time=")[1].split(" ")[0]
         return None
 
-    def fetch(self) -> DataSample:
+    def _fetch_impl(self) -> DataSample:
         """Perform ping and return RTT.
 
         Returns:
@@ -56,15 +56,13 @@ class PingSource(DataSource):
             )
 
             if result.returncode != 0:
-                message = f"Ping to {self._host} failed: {result.stderr.strip()}"
-                logger.warning(message)
-                return self._make_error_sample(message)
+                raise DataSourceError(
+                    f"Ping to {self._host} failed: {result.stderr.strip()}"
+                )
 
             rtt = self._parse_rtt(result.stdout)
             if rtt is None:
-                message = f"Could not parse ping output for {self._host}"
-                logger.warning(message)
-                return self._make_error_sample(message)
+                raise DataSourceError(f"Could not parse ping output for {self._host}")
 
             return DataSample(
                 source_name=self.name,
@@ -74,6 +72,4 @@ class PingSource(DataSource):
             )
 
         except subprocess.TimeoutExpired:
-            message = f"Ping to {self._host} timed out"
-            logger.warning(message)
-            return self._make_error_sample(message)
+            raise DataSourceError(f"Ping to {self._host} timed out") from None

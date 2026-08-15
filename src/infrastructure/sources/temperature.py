@@ -4,7 +4,7 @@ import logging
 
 import psutil
 
-from src.domain.data_source import DataSource
+from src.domain.data_source import DataSource, DataSourceError
 from src.domain.models import DataSample
 from src.infrastructure import config
 
@@ -20,13 +20,14 @@ class TemperatureSource(DataSource):
     @property
     def name(self) -> str:
         """Display name of the temperature source."""
-        return "Температура CPU"
+        return self._name
 
-    def __init__(self) -> None:
+    def __init__(self, name: str) -> None:
         """Initialize temperature source."""
+        self._name = name
         logger.debug("TemperatureSource initialized")
 
-    def fetch(self) -> DataSample:
+    def _fetch_impl(self) -> DataSample:
         """Read CPU temperature."""
         temps = psutil.sensors_temperatures()
 
@@ -40,6 +41,4 @@ class TemperatureSource(DataSource):
                     status="OK",
                 )
 
-        message = "No CPU temperature sensor found"
-        logger.warning(message)
-        return self._make_error_sample(message)
+        raise DataSourceError("No CPU temperature sensor found")

@@ -21,12 +21,12 @@ class MemorySource(DataSource):
         """Display name of the memory source."""
         return self._name
 
-    def __init__(self) -> None:
+    def __init__(self, name: str) -> None:
         """Initialize memory source."""
-        self._name = "Оперативная память"
+        self._name = name
         logger.debug("MemorySource initialized")
 
-    def fetch(self) -> DataSample:
+    def _fetch_impl(self) -> DataSample:
         """Read memory usage."""
         mem = psutil.virtual_memory()
         used_gb = mem.used / (1024**3)
