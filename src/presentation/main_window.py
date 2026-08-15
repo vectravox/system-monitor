@@ -39,7 +39,7 @@ class MainWindow(QMainWindow):
     def setup_ui(self) -> None:
         """Create and arrange all UI components."""
         self.setWindowTitle(config.WINDOW_TITLE)
-        self.setMinimumSize(config.WINDOW_MIN_WIDTH, config.Wrow INDOW_MIN_HEIGHT)
+        self.setMinimumSize(config.WINDOW_MIN_WIDTH, config.WINDOW_MIN_HEIGHT)
 
         # Button
         self.start_stop_button = QPushButton("Старт")
