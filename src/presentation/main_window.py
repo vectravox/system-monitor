@@ -3,7 +3,7 @@
 import logging
 
 from PySide6.QtCore import Qt, Slot
-from PySide6.QtGui import QStandardItem, QStandardItemModel
+from PySide6.QtGui import QCloseEvent, QStandardItem, QStandardItemModel
 from PySide6.QtWidgets import (
     QMainWindow,
     QPushButton,
@@ -105,3 +105,10 @@ class MainWindow(QMainWindow):
         self.table_model.setItem(row, 0, QStandardItem(sample.source_name))
         self.table_model.setItem(row, 1, data_item)
         self.table.resizeColumnToContents(0)
+
+    def closeEvent(self, event: QCloseEvent) -> None:
+        """Handle window close event."""
+        if self.service.is_running:
+            self.service.stop()
+        event.accept()
+        logger.debug("MainWindow closed")
