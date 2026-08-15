@@ -10,6 +10,7 @@ from src.domain.data_source import DataSource
 from .memory import MemorySource
 from .ping import PingSource
 from .temperature import TemperatureSource
+from .fan import FanSpeedSource
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +21,7 @@ def generate_sources_list() -> list[DataSource]:
         PingSource(),
         TemperatureSource(),
         MemorySource(),
-        # TODO: FanSpeedSource(),
+        FanSpeedSource(),
         # TODO: USBSource(),
         # TODO: DiskIOSource(),
         # TODO: CpuLoadSource(),
@@ -36,5 +37,6 @@ __all__ = [
     "MemorySource",
     "PingSource",
     "TemperatureSource",
+    "FanSpeedSource",
     "generate_sources_list",
 ]
