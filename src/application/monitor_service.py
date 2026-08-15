@@ -53,7 +53,7 @@ class MonitorService(QObject):
             self._workers.append(worker)
 
             thread.start()
-            logger.debug(f"Thread started for row {row}: {source.name}")
+            logger.debug(f'Thread started for row {row}: "{source.name}"')
 
         self.is_running = True
         logger.info("Monitoring started")

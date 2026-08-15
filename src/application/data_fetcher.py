@@ -40,7 +40,7 @@ class DataFetcher(QObject):
     def run(self) -> None:
         """Start the worker loop."""
         if self.is_running:
-            logger.warning("Worker for {source.name} is already running")
+            logger.warning(f'Worker for "{self.source.name}" is already running')
             return
 
         # QTimer must be created in the thread where the fetcher lives.
@@ -54,7 +54,7 @@ class DataFetcher(QObject):
 
         self.is_running = True
 
-        logger.debug(f"Worker started for {self.source.name}")
+        logger.debug(f'Worker started for "{self.source.name}"')
 
     def stop(self) -> None:
         """Stop the fetcher loop (called from any thread)."""
@@ -64,7 +64,7 @@ class DataFetcher(QObject):
     def _on_stop_requested(self) -> None:
         """Handle stop request in the fetcher's thread."""
         if not self.is_running:
-            logger.warning("Worker for {source.name} is already stopped")
+            logger.warning(f'Worker for "{self.source.name}" is already stopped')
             return
 
         if self.timer:
@@ -74,7 +74,7 @@ class DataFetcher(QObject):
 
         self.is_running = False
 
-        logger.debug(f"Worker stopped for {self.source.name}")
+        logger.debug(f'Worker stopped for "{self.source.name}"')
 
     @Slot()
     def _fetch_and_emit(self) -> None:
