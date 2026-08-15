@@ -33,7 +33,6 @@ class TemperatureSource(DataSource):
         for sensor_name in config.TEMPERATURE_SENSORS:
             if sensor_name in temps:
                 temp = temps[sensor_name][0].current
-                logger.debug(f"CPU temperature: {temp:.1f}°C")
                 return DataSample(
                     source_name=self.name,
                     value=f"{temp:.1f}",
