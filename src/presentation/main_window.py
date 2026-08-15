@@ -31,7 +31,7 @@ class MainWindow(QMainWindow):
         """
         super().__init__()
         self.service = service
-        self.service.data_ready.connect(self._on_data_ready)
+        self.service.data_ready.connect(self.update_table_row)
         self.rows = len(self.service.sources)
         self.setup_ui()
         logger.debug("MainWindow initialized")
@@ -39,7 +39,7 @@ class MainWindow(QMainWindow):
     def setup_ui(self) -> None:
         """Create and arrange all UI components."""
         self.setWindowTitle(config.WINDOW_TITLE)
-        self.setMinimumSize(config.WINDOW_MIN_WIDTH, config.WINDOW_MIN_HEIGHT)
+        self.setMinimumSize(config.WINDOW_MIN_WIDTH, config.Wrow INDOW_MIN_HEIGHT)
 
         # Button
         self.start_stop_button = QPushButton("Старт")
@@ -85,19 +85,21 @@ class MainWindow(QMainWindow):
             self.service.stop()
             self.start_stop_button.setText("Старт")
 
-    @Slot()
-    def _on_data_ready(self, row: int, sample: DataSample) -> None:
-        """Update table with data from source."""
-        self.table_model.setItem(row, 0, QStandardItem(sample.source_name))
-
-        display = sample.value
+    @Slot(int, DataSample)
+    def update_table_row(self, row: int, sample: DataSample) -> None:
+        """Update table row with data from source."""
+        data_item = QStandardItem()
+        display_text = sample.value
 
         if sample.status == "OK":
-            self.table_model.item(row, 1).setForeground(Qt.GlobalColor.black)
+            data_item.setForeground(Qt.GlobalColor.black)
             if sample.unit:
-                display = f"{display} {sample.unit}"
+                display_text = f"{display_text} {sample.unit}"
         elif sample.status == "ERROR":
-            display = f"ERROR: {display}"
-            self.table_model.item(row, 1).setForeground(Qt.GlobalColor.red)
+            data_item.setForeground(Qt.GlobalColor.red)
+            display_text = f"ERROR: {display_text}"
 
-        self.table_model.setItem(row, 1, QStandardItem(display))
+        data_item.setText(display_text)
+
+        self.table_model.setItem(row, 0, QStandardItem(sample.source_name))
+        self.table_model.setItem(row, 1, data_item)
