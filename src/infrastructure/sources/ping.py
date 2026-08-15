@@ -16,6 +16,11 @@ class PingSource(DataSource):
     Uses subprocess to call `ping -c 1 <host>`.
     """
 
+    @property
+    def name(self) -> str:
+        """Display name of the ping source."""
+        return f"ping {self._host}"
+
     def __init__(self, host: str = config.PING_HOST) -> None:
         """Initialize ping source.
 
@@ -26,11 +31,6 @@ class PingSource(DataSource):
         self._host = host
         self._timeout = config.PING_TIMEOUT_SECONDS
         logger.debug(f"PingSource initialized: {host}")
-
-    @property
-    def name(self) -> str:
-        """Display name of the ping source."""
-        return f"ping {self._host}"
 
     def _parse_rtt(self, output: str) -> str | None:
         """Extract RTT from ping output."""
@@ -44,9 +44,6 @@ class PingSource(DataSource):
 
         Returns:
             DataSample: Ping time in milliseconds.
-
-        Raises:
-            DataSourceError: If ping fails or times out.
 
         """
         try:

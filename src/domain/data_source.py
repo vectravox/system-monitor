@@ -5,13 +5,6 @@ from abc import ABC, abstractmethod
 from .models import DataSample
 
 
-class DataSourceError(Exception):
-    """Base exception for all data source errors.
-
-    Raised when a data source fails to collect data.
-    """
-
-
 class DataSource(ABC):
     """Abstract contract for all data sources.
 
@@ -27,32 +20,13 @@ class DataSource(ABC):
 
     @abstractmethod
     def fetch(self) -> DataSample:
-        """Collect a single measurement from the source.
-
-        Returns:
-            DataSample: Measurement data.
-
-        Raises:
-            DataSourceError: If the source is unavailable or data cannot be read.
-            PermissionError: If the process lacks necessary permissions.
-            FileNotFoundError: If a required file or device is missing.
-            OSError: If a system call fails.
-
-        """
+        """Collect a single measurement from the source."""
         ...
 
-    def _make_error_sample(self, message: str) -> DataSample:
-        """Create an error DataSample with logging.
-
-        Args:
-            message: Error description.
-
-        Returns:
-            DataSample with status="ERROR".
-
-        """
+    def _make_error_sample(self, error_msg: str) -> DataSample:
+        """Create an error DataSample with logging."""
         return DataSample(
             source_name=self.name,
-            value=message,
+            value=error_msg,
             status="ERROR",
         )
