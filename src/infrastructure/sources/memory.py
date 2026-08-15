@@ -1,6 +1,7 @@
 """Memory usage data source."""
 
 import logging
+
 import psutil
 
 from src.domain.data_source import DataSource
