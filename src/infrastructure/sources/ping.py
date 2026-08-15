@@ -3,7 +3,7 @@
 import logging
 import subprocess
 
-from src.domain.datasource import DataSource
+from src.domain.data_source import DataSource
 from src.domain.models import DataSample
 from src.infrastructure import config
 

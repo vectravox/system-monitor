@@ -5,7 +5,7 @@ This module provides factory functions for creating all data sources.
 
 import logging
 
-from src.domain.datasource import DataSource
+from src.domain.data_source import DataSource
 
 from .ping import PingSource
 

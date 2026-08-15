@@ -12,7 +12,8 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from src.application.interfaces import Monitor
+from src.application.monitor_service import MonitorService
+from src.domain.models import DataSample
 from src.infrastructure import config
 
 logger = logging.getLogger(__name__)
@@ -21,7 +22,7 @@ logger = logging.getLogger(__name__)
 class MainWindow(QMainWindow):
     """Main window of the System Monitor application."""
 
-    def __init__(self, service: Monitor) -> None:
+    def __init__(self, service: MonitorService) -> None:
         """Initialize the main window.
 
         Args:
@@ -30,6 +31,7 @@ class MainWindow(QMainWindow):
         """
         super().__init__()
         self.service = service
+        self.service.data_ready.connect(self._on_data_ready)
         self.rows = len(self.service.sources)
         self.setup_ui()
         logger.debug("MainWindow initialized")
@@ -79,25 +81,23 @@ class MainWindow(QMainWindow):
         if not self.service.is_running:
             self.service.start()
             self.start_stop_button.setText("Стоп")
-            self.update_table()
         else:
             self.service.stop()
             self.start_stop_button.setText("Старт")
 
-    def update_table(self) -> None:
-        """Update table with data from sources."""
-        data = self.service.fetch()
+    @Slot()
+    def _on_data_ready(self, row: int, sample: DataSample) -> None:
+        """Update table with data from source."""
+        self.table_model.setItem(row, 0, QStandardItem(sample.source_name))
 
-        for row, sample in enumerate(data):
-            self.table_model.setItem(row, 0, QStandardItem(sample.source_name))
+        display = sample.value
 
-            display = sample.value
+        if sample.status == "OK":
+            self.table_model.item(row, 1).setForeground(Qt.GlobalColor.black)
+            if sample.unit:
+                display = f"{display} {sample.unit}"
+        elif sample.status == "ERROR":
+            display = f"ERROR: {display}"
+            self.table_model.item(row, 1).setForeground(Qt.GlobalColor.red)
 
-            if sample.status == "OK":
-                self.table_model.item(row, 1).setForeground(Qt.GlobalColor.black)
-                if sample.unit:
-                    display += f" {sample.unit}"
-            elif sample.status == "ERROR":
-                self.table_model.item(row, 1).setForeground(Qt.GlobalColor.red)
-
-            self.table_model.setItem(row, 1, QStandardItem(display))
+        self.table_model.setItem(row, 1, QStandardItem(display))

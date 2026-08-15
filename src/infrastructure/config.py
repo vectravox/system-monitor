@@ -11,16 +11,19 @@ WINDOW_MIN_WIDTH: int = 800
 """Minimum window height in pixels."""
 WINDOW_MIN_HEIGHT: int = 500
 
-"""Default update interval for all data sources (seconds)."""
+"""Default update interval for all data sources."""
 UPDATE_INTERVAL_SECONDS: float = 2.0
 
 """Path to log file."""
 DEFAULT_LOG_PATH: Path = Path("monitor.log")
 
+"""Maximum time to wait for a thread to finish."""
+THREAD_STOP_TIMEOUT_SECONDS: float = 2.0
+
 """Host to ping for network latency test."""
 PING_HOST: str = "8.8.8.8"
 
-"""Maximum time to wait for ping response (seconds)."""
+"""Maximum time to wait for ping response."""
 PING_TIMEOUT_SECONDS: float = 2.0
 
 """Path to binary file on USB device for sequential reading."""
