@@ -54,7 +54,7 @@ class PingSource(DataSource):
                 ["ping", "-c", "1", self._host],
                 capture_output=True,
                 text=True,
-                timeout=self._timeout + 1,
+                timeout=self._timeout,
                 check=False,
             )
 
