@@ -22,12 +22,6 @@ dev = [
 python_version = "3.13"
 strict = true
 
-# [[tool.mypy.overrides]]
-# module = [
-#     "PySide6.*",
-# ]
-# ignore_missing_imports = true
-
 [tool.ruff]
 target-version = "py313"
 
