@@ -63,6 +63,7 @@ class MainWindow(QMainWindow):
         self.table.verticalHeader().setVisible(False)
         self.table.horizontalHeader().setStretchLastSection(True)
         self.table.setModel(self.table_model)
+        self.table.resizeColumnToContents(0)
 
         # Create central widget
         self.central_widget = QWidget()
@@ -103,3 +104,4 @@ class MainWindow(QMainWindow):
 
         self.table_model.setItem(row, 0, QStandardItem(sample.source_name))
         self.table_model.setItem(row, 1, data_item)
+        self.table.resizeColumnToContents(0)
