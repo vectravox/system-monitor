@@ -29,8 +29,8 @@ PING_TIMEOUT_SECONDS: float = 2.0
 
 """USB source settings."""
 # USB_DATA_PATH: Path = Path("/media/usb/data.bin")
-USB_DATA_PATH: Path = Path("/mnt/backup/os-install-usb/archlinux-2026.01.01-x86_64.iso")
-USB_READ_SIZE_BYTES: int = 600
+USB_DATA_PATH: Path = Path("/mnt/backup/backups/easyeffectsrc")
+USB_READ_SIZE_BYTES: int = 200
 
 """Possible sensor names to check for CPU temperature."""
 TEMPERATURE_SENSORS: list[str] = ["coretemp", "k10temp", "cpu-thermal"]
