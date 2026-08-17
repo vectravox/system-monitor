@@ -32,7 +32,7 @@ PING_HOST: str = "8.8.8.8"
 PING_TIMEOUT_SECONDS: float = 2.0
 
 """Binary source settings."""
-BINARY_DATA_PATH: Path = Path("/media/usb/data.bin")
+BINARY_DATA_PATH: Path = Path("/etc/passwd")
 BINARY_READ_SIZE_BYTES: int = 20
 
 """Possible sensor names to check for CPU temperature."""
