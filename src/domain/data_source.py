@@ -13,14 +13,17 @@ class DataSourceError(Exception):
 
 
 class DataSource(ABC):
-    """Abstract contract for all data sources.
+    """Base class for all data sources with built-in error handling.
 
-    Each concrete implementation provides logic for collecting
-    a specific system metric (CPU, memory, ping, etc.).
+    Subclasses implement _fetch_impl() to provide actual data collection.
+    The public fetch() catches all exceptions and converts them to
+    DataSample with status="ERROR", ensuring the application never crashes
+    due to a failure in a single source.
+
+    The name property returns self._name by default and can be overridden.
     """
 
     @property
-    @abstractmethod
     def name(self) -> str:
         """Display name of the data source.
 
@@ -28,30 +31,22 @@ class DataSource(ABC):
 
         Returns:
             str: Human-readable source name.
-
         """
-        ...
+        return self._name
 
     @abstractmethod
     def _fetch_impl(self) -> DataSample:
-        """Implement actual fetching logic.
+        """Implement actual data fetching logic.
 
-        This method may raise exceptions. All exceptions are caught
-        by the public fetch() method and converted to error DataSample.
+        May raise exceptions. All exceptions are caught by fetch().
         """
         ...
 
     def fetch(self) -> DataSample:
-        """Public method to fetch data with automatic error handling.
-
-        All exceptions from _do_fetch() are caught and logged.
-        Instead of crashing, they are converted to DataSample with status="ERROR".
-        This ensures that the application will not crash due to an unexpected
-        failure in one of the data sources.
+        """Fetch data with automatic error handling.
 
         Returns:
-            DataSample: Either valid data (status="OK") or an error message (status="ERROR").
-
+            DataSample: status="OK" with data, or status="ERROR" with error message.
         """
         try:
             return self._fetch_impl()

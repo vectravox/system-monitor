@@ -16,11 +16,6 @@ class MemorySource(DataSource):
     Uses psutil.virtual_memory().
     """
 
-    @property
-    def name(self) -> str:
-        """Display name of the memory source."""
-        return self._name
-
     def __init__(self, name: str) -> None:
         """Initialize memory source."""
         self._name = name

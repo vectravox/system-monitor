@@ -17,11 +17,6 @@ class TemperatureSource(DataSource):
     Uses psutil.sensors_temperatures().
     """
 
-    @property
-    def name(self) -> str:
-        """Display name of the temperature source."""
-        return self._name
-
     def __init__(self, name: str) -> None:
         """Initialize temperature source."""
         self._name = name
