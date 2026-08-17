@@ -23,11 +23,14 @@ class DataSource(ABC):
     The name property returns self._name by default and can be overridden.
     """
 
+    _name: str
+
     @property
     def name(self) -> str:
         """Return human-readable source name.
 
         Used in the GUI table and error messages.
+        Override for constructing display name dynamically.
         """
         return self._name
 
@@ -39,15 +42,15 @@ class DataSource(ABC):
         """
         ...
 
-    def close(self) -> None:
+    def close(self) -> None:  # noqa: B027
         """Release resources held by the source. Override if needed."""
-        pass
 
     def fetch(self) -> DataSample:
         """Fetch data with automatic error handling.
 
         Returns:
             DataSample: status="OK" with data, or status="ERROR" with error message.
+
         """
         try:
             return self._fetch_impl()
