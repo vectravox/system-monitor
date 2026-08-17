@@ -25,7 +25,7 @@ CUSTOM_UPDATE_INTERVALS_SECONDS: dict[str, float] = {
     "MouseCursorPositionSource": 0.1,
 }
 
-"""Maximum time to wait for a thread to finish."""
+"""Maximum time to wait for a Qt thread to finish."""
 THREAD_STOP_TIMEOUT_SECONDS: float = 2.0
 
 """Ping source settings."""
@@ -39,3 +39,6 @@ BINARY_READ_SIZE_BYTES: int = 200
 
 """Possible sensor names to check for CPU temperature."""
 TEMPERATURE_SENSORS: list[str] = ["coretemp", "k10temp", "cpu-thermal"]
+
+"""Number of random bytes used to generate an integer."""
+RANDOM_NUMBER_BYTES = 2

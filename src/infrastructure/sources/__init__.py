@@ -15,6 +15,7 @@ from .memory import MemoryUsageSource
 from .mouse import MouseCursorPositionSource
 from .network import NetworkSource
 from .ping import PingSource
+from .random import RandomSource
 from .temperature import TemperatureSource
 
 """List of active monitoring sources."""
@@ -27,6 +28,6 @@ SOURCES: list[Callable[[], DataSource]] = [
     PingSource,
     NetworkSource,
     MouseCursorPositionSource,
+    RandomSource,
     BinaryReadSource,
-    # TODO: RandomSource,
 ]
