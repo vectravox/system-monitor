@@ -40,7 +40,17 @@ class DataFetcher(QObject):
         if self.is_running:
             logger.warning(f'Worker for "{self.source.name}" is already running')
             return
-        self.source.start()
+
+        # Wrap source.start() with error handling.
+        # In normal scenario source.start() doesn't return anything, but
+        # if start() raises an exception, catch_errors returns a DataSample
+        # with status="ERROR". We emit that error to the GUI and stop this worker.
+        error_sample = self.source.catch_errors(self.source.start)()
+        if error_sample:
+            self.data_ready.emit(error_sample)
+            return
+
+        # Perform first fetch immediately to show data without waiting for timer.
         self._fetch_and_emit()
 
         # QTimer must be created in the thread where the fetcher lives.
@@ -71,7 +81,12 @@ class DataFetcher(QObject):
             self.timer.deleteLater()
             self.timer = None
 
-        self.source.stop()
+        # Wrap source.stop() with error handling.
+        # If stop() raises an exception, we emit the error DataSample to the GUI.
+        error_sample = self.source.catch_errors(self.source.stop)()
+        if error_sample:
+            self.data_ready.emit(error_sample)
+
         self.is_running = False
         logger.debug(f'Worker stopped for "{self.source.name}"')
 
@@ -81,5 +96,7 @@ class DataFetcher(QObject):
 
         This method is called by the timer every `interval` seconds.
         """
-        sample = self.source.fetch()
+        # Wrap source.fetch() with error handling.
+        # fetch() always returns a DataSample (either data or error).
+        sample = self.source.catch_errors(self.source.fetch)()
         self.data_ready.emit(sample)

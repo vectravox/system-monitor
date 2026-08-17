@@ -43,7 +43,7 @@ class BinaryReadSource(DataSource):
             self._file.close()
             logger.debug(f"File for binary read closed: {self._file_path}")
 
-    def _fetch_impl(self) -> DataSample:
+    def fetch(self) -> DataSample:
         """Read config.BINARY_READ_SIZE_BYTES bytes from the file."""
         data = self._file.read(config.BINARY_READ_SIZE_BYTES)
 

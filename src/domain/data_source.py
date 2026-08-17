@@ -2,6 +2,9 @@
 
 import logging
 from abc import ABC, abstractmethod
+from collections.abc import Callable
+from functools import wraps
+from typing import ParamSpec
 
 from .models import DataSample
 
@@ -12,48 +15,53 @@ class DataSourceError(Exception):
     """Error inside DataSource fetching logic."""
 
 
+P = ParamSpec("P")
+
+
 class DataSource(ABC):
-    """Base class for all data sources with built-in error handling.
+    """Base class for all data sources.
 
-    Subclasses implement _fetch_impl() to provide actual data collection.
-    The public fetch() catches all exceptions and converts them to
-    DataSample with status="ERROR", ensuring the application never crashes
-    due to a failure in a single source.
-
-    The name property returns self._name by default and can be overridden.
+    Subclasses implement fetch() to provide actual data collection.
+    Optionally override start() and stop() for resource management.
     """
 
-    """Human-readable source name."""
     name: str
 
-    @abstractmethod
-    def _fetch_impl(self) -> DataSample:
-        """Implement actual data fetching from the source.
+    def catch_errors(
+        self, func: Callable[P, DataSample | None]
+    ) -> Callable[P, DataSample | None]:
+        """Catch all unexpected errors.
 
-        All exceptions are caught by fetch().
+        If the decorated method raises an exception, it is logged and
+        a DataSample with status="ERROR" is returned.
+
+        The wrapper intercepts exceptions and converts them into
+        DataSample objects, ensuring that errors from any source
+        are displayed in the GUI without crashing the application.
         """
+
+        @wraps(func)
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -> DataSample | None:
+            try:
+                return func(*args, **kwargs)
+            except Exception as e:  # noqa: BLE001  # Intended
+                error_msg = f'Failed to {func.__name__}: "{e}"'
+                logger.warning(error_msg)
+                return DataSample(
+                    source_name=self.name,
+                    value=error_msg,
+                    status="ERROR",
+                )
+
+        return wrapper
+
+    @abstractmethod
+    def fetch(self) -> DataSample:
+        """Implement data fetching from the source."""
         ...
 
-    def start(self) -> None:  # noqa: B027  # Optional prepare method
+    def start(self) -> None:  # noqa: B027
         """Prepare resources by the source. Override if needed."""
 
-    def stop(self) -> None:  # noqa: B027  # Optional cleanup method
+    def stop(self) -> None:  # noqa: B027
         """Release resources held by the source. Override if needed."""
-
-    def fetch(self) -> DataSample:
-        """Fetch data with automatic error handling.
-
-        Returns:
-            DataSample: status="OK" with data, or status="ERROR" with error message.
-
-        """
-        try:
-            return self._fetch_impl()
-        except Exception as e:  # noqa: BLE001  # Catch all to prevent crashes
-            error_msg = f'Failed to read: "{e}"'
-            logger.warning(error_msg)
-            return DataSample(
-                source_name=self.name,
-                value=error_msg,
-                status="ERROR",
-            )

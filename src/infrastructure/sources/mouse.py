@@ -18,7 +18,7 @@ class MouseCursorPositionSource(DataSource):
         """Initialize mouse cursor position source."""
         self.name = "Позиция курсора"
 
-    def _fetch_impl(self) -> DataSample:
+    def fetch(self) -> DataSample:
         """Read current mouse cursor position."""
         pos = QCursor.pos()
         return DataSample(

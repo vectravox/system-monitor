@@ -20,7 +20,7 @@ class RandomSource(DataSource):
         """Initialize random source."""
         self.name = f"Случайное число, {config.RANDOM_NUMBER_BYTES} байт(а)"
 
-    def _fetch_impl(self) -> DataSample:
+    def fetch(self) -> DataSample:
         """Generate a cryptographically secure random number."""
         random_bytes = os.urandom(config.RANDOM_NUMBER_BYTES)
         value = int.from_bytes(random_bytes, byteorder="big")

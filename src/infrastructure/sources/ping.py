@@ -34,7 +34,7 @@ class PingSource(DataSource):
                 return line.split("time=")[1].split(" ")[0]
         return None
 
-    def _fetch_impl(self) -> DataSample:
+    def fetch(self) -> DataSample:
         """Perform ping and return RTT.
 
         Returns:

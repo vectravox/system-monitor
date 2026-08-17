@@ -16,7 +16,7 @@ class CpuLoadSource(DataSource):
         """Initialize CPU load source."""
         self.name = "Загрузка CPU"
 
-    def _fetch_impl(self) -> DataSample:
+    def fetch(self) -> DataSample:
         """Read CPU load percentage."""
         load = psutil.cpu_percent(interval=0.1)
 

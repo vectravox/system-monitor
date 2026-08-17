@@ -32,7 +32,7 @@ class NetworkSource(DataSource):
             raise DataSourceError("No network I/O counters available")
         return counters
 
-    def _fetch_impl(self) -> DataSample:
+    def fetch(self) -> DataSample:
         """Read network I/O speed."""
         counters = self._read_net_io_counters()
         now = time.time()

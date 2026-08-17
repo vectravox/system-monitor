@@ -48,8 +48,7 @@ class MonitorService(QObject):
         for row, source in enumerate(self.sources):
             thread = QThread()
             interval = config.CUSTOM_UPDATE_INTERVALS_SECONDS.get(
-                source.__class__.__name__,
-                config.DEFAULT_UPDATE_INTERVAL_SECONDS
+                source.__class__.__name__, config.DEFAULT_UPDATE_INTERVAL_SECONDS
             )
             worker = DataFetcher(source, interval)
             worker.moveToThread(thread)

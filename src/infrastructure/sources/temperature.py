@@ -21,7 +21,7 @@ class TemperatureSource(DataSource):
         """Initialize temperature source."""
         self.name = "Температура CPU"
 
-    def _fetch_impl(self) -> DataSample:
+    def fetch(self) -> DataSample:
         """Read CPU temperature."""
         temps = psutil.sensors_temperatures()
 

@@ -16,7 +16,7 @@ class DiskUsageSource(DataSource):
         """Initialize disk usage source."""
         self.name = "Использование диска"
 
-    def _fetch_impl(self) -> DataSample:
+    def fetch(self) -> DataSample:
         """Read disk usage."""
         usage = psutil.disk_usage("/")
         used_gb = usage.used / (1024**3)

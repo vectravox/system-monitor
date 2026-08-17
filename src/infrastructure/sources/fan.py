@@ -20,7 +20,7 @@ class FanSpeedSource(DataSource):
         """Initialize fan speed source."""
         self.name = "Скорость вентиляторов"
 
-    def _fetch_impl(self) -> DataSample:
+    def fetch(self) -> DataSample:
         """Read fan speeds.
 
         Returns:

@@ -3,7 +3,13 @@
 import logging
 
 from PySide6.QtCore import Qt, Slot
-from PySide6.QtGui import QCloseEvent, QKeySequence, QStandardItem, QStandardItemModel
+from PySide6.QtGui import (
+    QCloseEvent,
+    QKeyEvent,
+    QKeySequence,
+    QStandardItem,
+    QStandardItemModel,
+)
 from PySide6.QtWidgets import (
     QApplication,
     QMainWindow,
@@ -112,7 +118,12 @@ class MainWindow(QMainWindow):
         self.table.resizeColumnToContents(0)
         self.table.resizeRowToContents(row)
 
-    def keyPressEvent(self, event) -> None:
+    def keyPressEvent(self, event: QKeyEvent) -> None:
+        """Handle key press events.
+
+        Intercepts Ctrl+C to copy the currently selected cell content
+        to the clipboard. All other key events are passed to the parent.
+        """
         if event.matches(QKeySequence.StandardKey.Copy):
             self._copy_selected_cell()
         else:

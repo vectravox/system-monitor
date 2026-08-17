@@ -20,7 +20,7 @@ class MemoryUsageSource(DataSource):
         """Initialize memory source."""
         self.name = "Оперативная память"
 
-    def _fetch_impl(self) -> DataSample:
+    def fetch(self) -> DataSample:
         """Read memory usage."""
         mem = psutil.virtual_memory()
         used_gb = mem.used / (1024**3)
