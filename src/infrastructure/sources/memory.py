@@ -27,7 +27,6 @@ class MemorySource(DataSource):
         used_gb = mem.used / (1024**3)
         total_gb = mem.total / (1024**3)
 
-        logger.debug(f"Memory: {used_gb:.2f} GB / {total_gb:.2f} GB")
         return DataSample(
             source_name=self.name,
             value=f"{used_gb:.2f} / {total_gb:.2f}",
