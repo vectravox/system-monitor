@@ -101,9 +101,6 @@ requires-dist = [
     { name = "types-psutil", specifier = ">=7.2.2.20260518" },
 ]
 
-[package.metadata.requires-dev]
-dev = []
-
 [[package]]
 name = "types-psutil"
 version = "7.2.2.20260518"
