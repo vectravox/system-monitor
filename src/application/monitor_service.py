@@ -1,6 +1,7 @@
 """Monitor service implementation."""
 
 import logging
+from collections.abc import Callable
 
 from PySide6.QtCore import QObject, QThread, Signal, Slot
 
@@ -8,6 +9,7 @@ from src.application.data_fetcher import DataFetcher
 from src.domain.data_source import DataSource
 from src.domain.models import DataSample
 from src.infrastructure import config
+from src.infrastructure.sources import SOURCES
 
 logger = logging.getLogger(__name__)
 
@@ -17,14 +19,20 @@ class MonitorService(QObject):
 
     data_ready = Signal(int, DataSample)
 
-    def __init__(self, sources: list[DataSource]) -> None:
+    def __init__(self, sources: list[Callable[[], DataSource]] = SOURCES) -> None:
         """Initialize the monitor service with sources."""
         super().__init__()
         self.is_running = False
-        self.sources = sources
+        self.sources = self._initialize_sources(sources)
         self._threads: list[QThread] = []
         self._workers: list[DataFetcher] = []
-        logger.debug(f"MonitorService initialized with {len(self.sources)} sources")
+        logger.debug("MonitorService initialized")
+
+    def _initialize_sources(
+        self, sources: list[Callable[[], DataSource]]
+    ) -> list[DataSource]:
+        """Create source instances."""
+        return [source() for source in sources]
 
     def start(self) -> None:
         """Start monitoring all sources in background threads."""

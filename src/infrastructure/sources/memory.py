@@ -16,10 +16,9 @@ class MemorySource(DataSource):
     Uses psutil.virtual_memory().
     """
 
-    def __init__(self, name: str) -> None:
+    def __init__(self) -> None:
         """Initialize memory source."""
-        self._name = name
-        logger.debug("MemorySource initialized")
+        self.name = "Оперативная память"
 
     def _fetch_impl(self) -> DataSample:
         """Read memory usage."""

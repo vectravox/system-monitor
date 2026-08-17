@@ -11,7 +11,6 @@ from PySide6.QtWidgets import QApplication
 
 from src.application.monitor_service import MonitorService
 from src.infrastructure.logging_config import setup_logging
-from src.infrastructure.sources import generate_sources_list
 from src.presentation.main_window import MainWindow
 
 
@@ -21,8 +20,7 @@ def main() -> None:
 
     app = QApplication(sys.argv)
 
-    monitor_sources = generate_sources_list()
-    monitor_service = MonitorService(monitor_sources)
+    monitor_service = MonitorService()
 
     window = MainWindow(monitor_service)
     window.show()

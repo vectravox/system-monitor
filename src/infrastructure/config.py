@@ -9,7 +9,8 @@ WINDOW_MIN_HEIGHT: int = 500
 
 """Logging settings."""
 DEFAULT_LOG_PATH: Path = Path("monitor.log")
-CONSOLE_LOG_LEVEL: str = "INFO"
+# CONSOLE_LOG_LEVEL: str = "INFO"
+CONSOLE_LOG_LEVEL: str = "DEBUG"
 FILE_LOG_LEVEL: str = "DEBUG"
 LOG_MSG_FORMAT: str = (
     "%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s"
@@ -27,8 +28,9 @@ PING_HOST: str = "8.8.8.8"
 PING_TIMEOUT_SECONDS: float = 2.0
 
 """USB source settings."""
-USB_DATA_PATH: Path = Path("/media/usb/data.bin")
-USB_READ_SIZE_BYTES: int = 20
+# USB_DATA_PATH: Path = Path("/media/usb/data.bin")
+USB_DATA_PATH: Path = Path("/mnt/backup/os-install-usb/archlinux-2026.01.01-x86_64.iso")
+USB_READ_SIZE_BYTES: int = 600
 
 """Possible sensor names to check for CPU temperature."""
 TEMPERATURE_SENSORS: list[str] = ["coretemp", "k10temp", "cpu-thermal"]

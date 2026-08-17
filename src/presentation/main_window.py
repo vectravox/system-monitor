@@ -23,12 +23,7 @@ class MainWindow(QMainWindow):
     """Main window of the System Monitor application."""
 
     def __init__(self, service: MonitorService) -> None:
-        """Initialize the main window.
-
-        Args:
-            service: Monitor service instance.
-
-        """
+        """Initialize the main window."""
         super().__init__()
         self.service = service
         self.service.data_ready.connect(self.update_table_row)
@@ -45,36 +40,40 @@ class MainWindow(QMainWindow):
         self.start_stop_button = QPushButton("Старт")
         self.start_stop_button.clicked.connect(self.on_start_stop_clicked)
 
-        # Table model
-        self.table_model = QStandardItemModel()
-        self.table_model.setHorizontalHeaderLabels(["Источник", "Данные"])
+        # Table
+        self.table_model = self._create_table_model()
+        self.table = self._create_table_view(self.table_model)
 
-        # Inital items
-        for row in range(self.rows):
-            self.table_model.setItem(
-                row, 0, QStandardItem(self.service.sources[row].name)
-            )
-            self.table_model.setItem(row, 1, QStandardItem("Ожидание запуска..."))
-
-        # Table view
-        self.table = QTableView()
-        self.table.setSelectionMode(QTableView.SelectionMode.NoSelection)
-        self.table.setEditTriggers(QTableView.EditTrigger.NoEditTriggers)
-        self.table.verticalHeader().setVisible(False)
-        self.table.horizontalHeader().setStretchLastSection(True)
-        self.table.setModel(self.table_model)
-        self.table.resizeColumnToContents(0)
-
-        # Create central widget
+        # Central widget
         self.central_widget = QWidget()
         self.setCentralWidget(self.central_widget)
-
-        # Add elements
         self.central_widget_layout = QVBoxLayout(self.central_widget)
+
+        # Add button and table to central widget
         self.central_widget_layout.addWidget(
             self.start_stop_button, alignment=Qt.AlignmentFlag.AlignLeft
         )
         self.central_widget_layout.addWidget(self.table)
+
+    def _create_table_view(self, table_model: QStandardItemModel) -> QTableView:
+        table = QTableView()
+        table.setSelectionMode(QTableView.SelectionMode.NoSelection)
+        table.setEditTriggers(QTableView.EditTrigger.NoEditTriggers)
+        table.verticalHeader().setVisible(False)
+        table.horizontalHeader().setStretchLastSection(True)
+        table.setModel(self.table_model)
+        table.resizeColumnToContents(0)
+        table.resizeRowsToContents()
+        return table
+
+    def _create_table_model(self) -> QStandardItemModel:
+        table_model = QStandardItemModel()
+        table_model.setHorizontalHeaderLabels(["Источник", "Данные"])
+
+        for row in range(self.rows):
+            table_model.setItem(row, 0, QStandardItem(self.service.sources[row].name))
+            table_model.setItem(row, 1, QStandardItem("Ожидание запуска..."))
+        return table_model
 
     @Slot()
     def on_start_stop_clicked(self) -> None:
@@ -105,6 +104,7 @@ class MainWindow(QMainWindow):
         self.table_model.setItem(row, 0, QStandardItem(sample.source_name))
         self.table_model.setItem(row, 1, data_item)
         self.table.resizeColumnToContents(0)
+        self.table.resizeRowToContents(row)
 
     def closeEvent(self, event: QCloseEvent) -> None:
         """Handle window close event."""

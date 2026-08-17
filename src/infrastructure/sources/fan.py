@@ -16,10 +16,9 @@ class FanSpeedSource(DataSource):
     Uses psutil.sensors_fans().
     """
 
-    def __init__(self, name: str) -> None:
+    def __init__(self) -> None:
         """Initialize fan speed source."""
-        self._name = name
-        logger.debug("FanSpeedSource initialized")
+        self.name = "Скорость вентиляторов"
 
     def _fetch_impl(self) -> DataSample:
         """Read fan speeds.
