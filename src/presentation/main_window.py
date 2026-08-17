@@ -7,6 +7,7 @@ from PySide6.QtGui import (
     QCloseEvent,
     QKeyEvent,
     QKeySequence,
+    QPalette,
     QStandardItem,
     QStandardItemModel,
 )
@@ -35,6 +36,7 @@ class MainWindow(QMainWindow):
         self.service = service
         self.service.data_ready.connect(self.update_table_row)
         self.rows = len(self.service.sources)
+        self._default_text_color = self.palette().color(QPalette.ColorRole.Text)
         self.setup_ui()
         logger.debug("MainWindow initialized")
 
@@ -107,7 +109,7 @@ class MainWindow(QMainWindow):
         display_text = sample.value
 
         if sample.status == "OK":
-            data_item.setForeground(Qt.GlobalColor.black)
+            data_item.setForeground(self._default_text_color)
             if sample.unit:
                 display_text = f"{display_text} {sample.unit}"
         elif sample.status == "ERROR":
