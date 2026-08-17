@@ -57,6 +57,11 @@ class MainWindow(QMainWindow):
 
     def _create_table_view(self, table_model: QStandardItemModel) -> QTableView:
         table = QTableView()
+        table.setStyleSheet("""
+            QTableView::item {
+                padding: 5px;
+            }
+        """)
         table.setSelectionMode(QTableView.SelectionMode.NoSelection)
         table.setEditTriggers(QTableView.EditTrigger.NoEditTriggers)
         table.verticalHeader().setVisible(False)
