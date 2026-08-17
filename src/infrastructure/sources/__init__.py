@@ -13,6 +13,7 @@ from .disk import DiskUsageSource
 from .fan import FanSpeedSource
 from .memory import MemoryUsageSource
 from .mouse import MouseCursorPositionSource
+from .network import NetworkSource
 from .ping import PingSource
 from .temperature import TemperatureSource
 
@@ -24,8 +25,8 @@ SOURCES: list[Callable[[], DataSource]] = [
     MemoryUsageSource,
     DiskUsageSource,
     PingSource,
+    NetworkSource,
     MouseCursorPositionSource,
     BinaryReadSource,
-    # TODO: NetworkSource,
     # TODO: RandomSource,
 ]
