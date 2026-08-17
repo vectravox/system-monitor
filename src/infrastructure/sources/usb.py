@@ -30,12 +30,18 @@ class USBSource(DataSource):
         self._file_path = file_path
         self.name = f"USB ({self._file_path.name})"
 
-    def open(self) -> None:
+    def start(self) -> None:
         """Open the USB file."""
         if not self._file_path.exists():
             raise FileNotFoundError(f"USB file not found: {self._file_path}")
         self._file = open(self._file_path, "rb")  # noqa: SIM115  # File kept open for performance
         logger.debug(f"USB file opened: {self._file_path}")
+
+    def stop(self) -> None:
+        """Close the USB file."""
+        if self._file:
+            self._file.close()
+            logger.debug(f"USB file closed: {self._file_path}")
 
     def _fetch_impl(self) -> DataSample:
         """Read config.USB_READ_SIZE_BYTES bytes from USB file."""
@@ -56,9 +62,3 @@ class USBSource(DataSource):
             value=hex_str,
             status="OK",
         )
-
-    def close(self) -> None:
-        """Close the USB file."""
-        if self._file:
-            self._file.close()
-            logger.debug(f"USB file closed: {self._file_path}")

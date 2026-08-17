@@ -38,10 +38,10 @@ class DataSource(ABC):
         """
         ...
 
-    def open(self) -> None:  # noqa: B027  # Optional prepare method
-        """Open resources by the source. Override if needed."""
+    def start(self) -> None:  # noqa: B027  # Optional prepare method
+        """Prepare resources by the source. Override if needed."""
 
-    def close(self) -> None:  # noqa: B027  # Optional cleanup method
+    def stop(self) -> None:  # noqa: B027  # Optional cleanup method
         """Release resources held by the source. Override if needed."""
 
     def fetch(self) -> DataSample:

@@ -51,7 +51,7 @@ class DataFetcher(QObject):
         self.timer.setInterval(int(self.interval * 1000))  # Convert to milliseconds
         self.timer.start()
 
-        self.source.open()
+        self.source.start()
         self.is_running = True
         logger.debug(f'Worker started for "{self.source.name}"')
 
@@ -71,7 +71,7 @@ class DataFetcher(QObject):
             self.timer.deleteLater()
             self.timer = None
 
-        self.source.close()
+        self.source.stop()
         self.is_running = False
         logger.debug(f'Worker stopped for "{self.source.name}"')
 
