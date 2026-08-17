@@ -72,6 +72,7 @@ class DataFetcher(QObject):
             self.timer.deleteLater()
             self.timer = None
 
+        self.source.close()
         self.is_running = False
 
         logger.debug(f'Worker stopped for "{self.source.name}"')

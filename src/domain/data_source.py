@@ -25,22 +25,23 @@ class DataSource(ABC):
 
     @property
     def name(self) -> str:
-        """Display name of the data source.
+        """Return human-readable source name.
 
         Used in the GUI table and error messages.
-
-        Returns:
-            str: Human-readable source name.
         """
         return self._name
 
     @abstractmethod
     def _fetch_impl(self) -> DataSample:
-        """Implement actual data fetching logic.
+        """Implement actual data fetching from the source.
 
-        May raise exceptions. All exceptions are caught by fetch().
+        All exceptions are caught by fetch().
         """
         ...
+
+    def close(self) -> None:
+        """Release resources held by the source. Override if needed."""
+        pass
 
     def fetch(self) -> DataSample:
         """Fetch data with automatic error handling.
