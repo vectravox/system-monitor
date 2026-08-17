@@ -1,6 +1,6 @@
 [project]
 name = "system-monitor"
-version = "0.1.0"
+version = "1.0.0"
 description = "GUI application for monitoring system parameters in real time"
 readme = "README.md"
 requires-python = "==3.13.*"
@@ -12,29 +12,3 @@ dependencies = [
     "pyside6>=6.11.1",
     "types-psutil>=7.2.2.20260518",
 ]
-
-[dependency-groups]
-dev = [
-    "ipython>=9.16.1",
-    "mypy>=2.3.0",
-    "ruff>=0.16.2",
-]
-
-[tool.mypy]
-python_version = "3.13"
-strict = true
-
-[tool.ruff]
-target-version = "py313"
-
-[tool.ruff.lint]
-extend-select = [
-    "B",
-    "C4",
-    "D",
-    "I",
-    "RUF",
-    "SIM",
-    "UP",
-]
-ignore = ["B008", "D203", "D211", "D213", "RUF001"]
