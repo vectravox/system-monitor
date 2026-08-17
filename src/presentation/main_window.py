@@ -3,8 +3,9 @@
 import logging
 
 from PySide6.QtCore import Qt, Slot
-from PySide6.QtGui import QCloseEvent, QStandardItem, QStandardItemModel
+from PySide6.QtGui import QCloseEvent, QKeySequence, QStandardItem, QStandardItemModel
 from PySide6.QtWidgets import (
+    QApplication,
     QMainWindow,
     QPushButton,
     QTableView,
@@ -110,6 +111,20 @@ class MainWindow(QMainWindow):
         self.table_model.setItem(row, 1, data_item)
         self.table.resizeColumnToContents(0)
         self.table.resizeRowToContents(row)
+
+    def keyPressEvent(self, event) -> None:
+        if event.matches(QKeySequence.StandardKey.Copy):
+            self._copy_selected_cell()
+        else:
+            super().keyPressEvent(event)
+
+    def _copy_selected_cell(self) -> None:
+        index = self.table.currentIndex()
+        if index.isValid():
+            item = self.table_model.itemFromIndex(index)
+            if item:
+                QApplication.clipboard().setText(item.text())
+                self.statusBar().showMessage("Текст скопирован ✅", 3500)
 
     def closeEvent(self, event: QCloseEvent) -> None:
         """Handle window close event."""
