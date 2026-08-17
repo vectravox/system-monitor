@@ -43,6 +43,9 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(config.WINDOW_TITLE)
         self.setMinimumSize(config.WINDOW_MIN_WIDTH, config.WINDOW_MIN_HEIGHT)
 
+        status_bar_font_size = self.statusBar().font().pointSize()
+        self.statusBar().setFixedHeight(status_bar_font_size + 5)
+
         # Button
         self.start_stop_button = QPushButton("Старт")
         self.start_stop_button.clicked.connect(self.on_start_stop_clicked)
