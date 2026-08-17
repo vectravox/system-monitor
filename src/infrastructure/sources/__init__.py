@@ -7,6 +7,7 @@ from collections.abc import Callable
 
 from src.domain.data_source import DataSource
 
+from .disk import DiskSource
 from .fan import FanSpeedSource
 from .memory import MemorySource
 from .ping import PingSource
@@ -20,7 +21,7 @@ SOURCES: list[Callable[[], DataSource]] = [
     MemorySource,
     FanSpeedSource,
     USBSource,
-    # TODO: DiskIOSource,
+    DiskSource,
     # TODO: CpuLoadSource,
     # TODO: NetworkSource,
     # TODO: RandomSource,
