@@ -67,13 +67,14 @@ class DataFetcher(QObject):
 
     def stop(self) -> None:
         """Stop the fetcher loop (called from any thread)."""
-        self.stop_requested.emit()
+        if self.is_running:
+            self.stop_requested.emit()
 
     @Slot()
     def _on_stop_requested(self) -> None:
         """Handle stop request in the fetcher's thread."""
         if not self.is_running:
-            logger.warning(f'Worker for "{self.source.name}" is already stopped')
+            logger.debug(f'Worker for "{self.source.name}" is already stopped')
             return
 
         if self.timer:
