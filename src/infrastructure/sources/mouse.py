@@ -12,8 +12,6 @@ class MouseCursorPositionSource(DataSource):
     Uses PySide6.QtGui.QCursor to get X/Y coordinates.
     """
 
-    update_interval = 1.0
-
     def __init__(self) -> None:
         """Initialize mouse cursor position source."""
         self.name = "Позиция курсора"
