@@ -7,23 +7,25 @@ from collections.abc import Callable
 
 from src.domain.data_source import DataSource
 
-from .disk import DiskSource
+from .binary import BinaryReadSource
+from .cpu import CpuLoadSource
+from .disk import DiskUsageSource
 from .fan import FanSpeedSource
-from .memory import MemorySource
+from .memory import MemoryUsageSource
+from .mouse import MouseCursorPositionSource
 from .ping import PingSource
 from .temperature import TemperatureSource
-from .usb import USBSource
 
 """List of active monitoring sources."""
 SOURCES: list[Callable[[], DataSource]] = [
-    PingSource,
+    CpuLoadSource,
     TemperatureSource,
-    MemorySource,
     FanSpeedSource,
-    USBSource,
-    DiskSource,
-    # TODO: CpuLoadSource,
+    MemoryUsageSource,
+    DiskUsageSource,
+    PingSource,
+    MouseCursorPositionSource,
+    BinaryReadSource,
     # TODO: NetworkSource,
     # TODO: RandomSource,
-    # TODO: DummySource,
 ]

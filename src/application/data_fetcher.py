@@ -6,7 +6,6 @@ from PySide6.QtCore import QObject, QTimer, Signal, Slot
 
 from src.domain.data_source import DataSource
 from src.domain.models import DataSample
-from src.infrastructure import config
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +23,7 @@ class DataFetcher(QObject):
     def __init__(
         self,
         source: DataSource,
-        interval: float = config.UPDATE_INTERVAL_SECONDS,
+        interval: float,
     ) -> None:
         """Initialize the worker."""
         super().__init__()
@@ -41,6 +40,8 @@ class DataFetcher(QObject):
         if self.is_running:
             logger.warning(f'Worker for "{self.source.name}" is already running')
             return
+        self.source.start()
+        self._fetch_and_emit()
 
         # QTimer must be created in the thread where the fetcher lives.
         # Since the fetcher may be moved to a background QThread after creation,
@@ -51,7 +52,6 @@ class DataFetcher(QObject):
         self.timer.setInterval(int(self.interval * 1000))  # Convert to milliseconds
         self.timer.start()
 
-        self.source.start()
         self.is_running = True
         logger.debug(f'Worker started for "{self.source.name}"')
 

@@ -18,7 +18,12 @@ LOG_MSG_FORMAT: str = (
 LOG_DATE_FORMAT: str = "%Y-%m-%d %H:%M:%S"
 
 """Default update interval for all data sources."""
-UPDATE_INTERVAL_SECONDS: float = 2.0
+DEFAULT_UPDATE_INTERVAL_SECONDS: float = 2.0
+
+"""Custom update interval for different data sources."""
+CUSTOM_UPDATE_INTERVALS_SECONDS: dict[str, float] = {
+    "MouseCursorPositionSource": 0.1,
+}
 
 """Maximum time to wait for a thread to finish."""
 THREAD_STOP_TIMEOUT_SECONDS: float = 2.0
@@ -27,10 +32,10 @@ THREAD_STOP_TIMEOUT_SECONDS: float = 2.0
 PING_HOST: str = "8.8.8.8"
 PING_TIMEOUT_SECONDS: float = 2.0
 
-"""USB source settings."""
-# USB_DATA_PATH: Path = Path("/media/usb/data.bin")
-USB_DATA_PATH: Path = Path("/mnt/backup/backups/easyeffectsrc")
-USB_READ_SIZE_BYTES: int = 200
+"""Binary source settings."""
+# BINARY_DATA_PATH: Path = Path("/media/usb/data.bin")
+BINARY_DATA_PATH: Path = Path("/mnt/backup/backups/easyeffectsrc")
+BINARY_READ_SIZE_BYTES: int = 200
 
 """Possible sensor names to check for CPU temperature."""
 TEMPERATURE_SENSORS: list[str] = ["coretemp", "k10temp", "cpu-thermal"]

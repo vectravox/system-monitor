@@ -24,7 +24,7 @@ class PingSource(DataSource):
 
         """
         self._host = host
-        self.name = f"ping {self._host}"
+        self.name = f"Ping: {self._host}"
         self._timeout = config.PING_TIMEOUT_SECONDS
 
     def _parse_rtt(self, output: str) -> str | None:

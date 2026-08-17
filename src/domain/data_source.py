@@ -26,10 +26,6 @@ class DataSource(ABC):
     """Human-readable source name."""
     name: str
 
-    # @property
-    # def name(self) -> str:
-    #     return self._name
-
     @abstractmethod
     def _fetch_impl(self) -> DataSample:
         """Implement actual data fetching from the source.

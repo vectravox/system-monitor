@@ -10,7 +10,7 @@ from src.domain.models import DataSample
 logger = logging.getLogger(__name__)
 
 
-class MemorySource(DataSource):
+class MemoryUsageSource(DataSource):
     """Data source that reads memory usage.
 
     Uses psutil.virtual_memory().
