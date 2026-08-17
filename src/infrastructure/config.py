@@ -9,8 +9,7 @@ WINDOW_MIN_HEIGHT: int = 500
 
 """Logging settings."""
 DEFAULT_LOG_PATH: Path = Path("monitor.log")
-# CONSOLE_LOG_LEVEL: str = "INFO"
-CONSOLE_LOG_LEVEL: str = "DEBUG"
+CONSOLE_LOG_LEVEL: str = "INFO"
 FILE_LOG_LEVEL: str = "DEBUG"
 LOG_MSG_FORMAT: str = (
     "%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s"
@@ -33,9 +32,8 @@ PING_HOST: str = "8.8.8.8"
 PING_TIMEOUT_SECONDS: float = 2.0
 
 """Binary source settings."""
-# BINARY_DATA_PATH: Path = Path("/media/usb/data.bin")
-BINARY_DATA_PATH: Path = Path("/mnt/backup/backups/easyeffectsrc")
-BINARY_READ_SIZE_BYTES: int = 200
+BINARY_DATA_PATH: Path = Path("/media/usb/data.bin")
+BINARY_READ_SIZE_BYTES: int = 20
 
 """Possible sensor names to check for CPU temperature."""
 TEMPERATURE_SENSORS: list[str] = ["coretemp", "k10temp", "cpu-thermal"]
