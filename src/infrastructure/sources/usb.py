@@ -35,7 +35,7 @@ class USBSource(DataSource):
         if not self._file_path.exists():
             raise FileNotFoundError(f"USB file not found: {self._file_path}")
         self._file = open(self._file_path, "rb")  # noqa: SIM115  # File kept open for performance
-        logger.debug(f"USB file open: {self._file_path}")
+        logger.debug(f"USB file opened: {self._file_path}")
 
     def _fetch_impl(self) -> DataSample:
         """Read config.USB_READ_SIZE_BYTES bytes from USB file."""
