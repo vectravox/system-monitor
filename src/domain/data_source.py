@@ -42,7 +42,7 @@ class DataSource(ABC):
         """
         ...
 
-    def close(self) -> None:  # noqa: B027
+    def close(self) -> None:  # noqa: B027  # Optional cleanup method
         """Release resources held by the source. Override if needed."""
 
     def fetch(self) -> DataSample:
@@ -54,7 +54,7 @@ class DataSource(ABC):
         """
         try:
             return self._fetch_impl()
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:  # noqa: BLE001  # Catch all to prevent crashes
             error_msg = f'Failed to read: "{e}"'
             logger.warning(error_msg)
             return DataSample(
