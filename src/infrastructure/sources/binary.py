@@ -28,7 +28,7 @@ class BinaryReadSource(DataSource):
 
         """
         self._file_path = file_path
-        self.name = f"Binary read ({self._file_path.name})"
+        self.name = f"Чтение файла ({self._file_path.name})"
 
     def start(self) -> None:
         """Open the file."""
