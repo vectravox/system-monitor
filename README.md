@@ -87,11 +87,3 @@ CUSTOM_UPDATE_INTERVALS_SECONDS = {
 PING_HOST = "8.8.8.8"
 BINARY_DATA_PATH = Path("/путь/к/вашему/файлу.bin")
 ```
-
-## Контакты
-
-По всем вопросам:
-
-- 🌐 [https://vk.ru/vectrax](https://vk.ru/vectrax)
-- 💬 [https://t.me/vectravox](https://t.me/vectravox)
-- ✉️ [vectravox@gmail.com](vectravox@gmail.com)
